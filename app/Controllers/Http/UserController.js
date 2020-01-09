@@ -12,6 +12,8 @@ class UserController {
 
     const user = await User.create(data, trx)
 
+    console.log('teste')
+
     await user.addresses().createMany(addresses, trx)
 
     await trx.commit()
