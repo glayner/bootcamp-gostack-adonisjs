@@ -16,7 +16,7 @@ class UserController {
 
     const trx = await Database.beginTransaction()
 
-    const user = await User.create(data)
+    const user = await User.create(data, trx)
 
     await user.addresses().createMany(addresses, trx)
 
@@ -27,7 +27,7 @@ class UserController {
     }
 
     if (permissions) {
-      await user.permissions().attach(permissions, trx)
+      await user.permissions().attach(permissions)
     }
 
     await user.loadMany(['roles', 'permissions'])
