@@ -3,9 +3,19 @@
 const Task = use('App/Models/Task')
 
 class TaskController {
-  async index ({ params }) {
+  async index ({ params, auth }) {
+    const user = await auth.getUser()
+
+    if (await user.can('read_private_task')) {
+      const tasks = await Task.query()
+        .where('project_id', params.projects_id)
+        .with('user')
+        .fetch()
+
+      return tasks
+    }
     const tasks = await Task.query()
-      .where('project_id', params.projects_id)
+      .where('type', 'public')
       .with('user')
       .fetch()
 
@@ -18,7 +28,8 @@ class TaskController {
       'title',
       'description',
       'due_date',
-      'file_id'
+      'file_id',
+      'type'
     ])
 
     const task = await Task.create({ ...data, project_id: params.projects_id })
@@ -26,10 +37,19 @@ class TaskController {
     return task
   }
 
-  async show ({ params }) {
+  async show ({ params, response, auth }) {
     const task = await Task.findOrFail(params.id)
 
-    return task
+    if (task.type === 'public') {
+      return task
+    }
+    const user = await auth.getUser()
+
+    if (await user.can('read_private_task')) {
+      return task
+    }
+
+    return response.status(400).send({ message: { error: 'Você não tem permissão de leitura' } })
   }
 
   async update ({ params, request }) {
@@ -39,7 +59,8 @@ class TaskController {
       'title',
       'description',
       'due_date',
-      'file_id'
+      'file_id',
+      'type'
     ])
 
     task.merge(data)

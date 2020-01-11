@@ -48,6 +48,6 @@ Route.group(() => {
   Route.get('projects', 'ProjectController.index')
   Route.get('projects/:id', 'ProjectController.show')
 
-  Route.get('projects/:id/tasks/', 'TaskController.index')
-  Route.get('projects/:id/tasks/:id', 'TaskController.show')
-}).middleware(['auth', 'can:read_task'])
+  Route.get('projects/:projects_id/tasks/', 'TaskController.index')
+  Route.get('projects/:projects_id/tasks/:id', 'TaskController.show')
+}).middleware(['auth', 'can:(read_task || read_private_task)'])
