@@ -16,6 +16,7 @@ Route.group(() => {
 
   Route.resource('projects', 'ProjectController')
     .apiOnly()
+    .except(['index', 'show'])
     .validator(new Map(
       [
         [
@@ -27,6 +28,7 @@ Route.group(() => {
 
   Route.resource('projects.tasks', 'TaskController')
     .apiOnly()
+    .except(['index', 'show'])
     .validator(new Map(
       [
         [
@@ -40,4 +42,12 @@ Route.group(() => {
     .apiOnly()
   Route.resource('roles', 'RoleController')
     .apiOnly()
-}).middleware(['auth'])
+}).middleware(['auth', 'is:(administrator || moderator)'])
+
+Route.group(() => {
+  Route.get('projects', 'ProjectController.index')
+  Route.get('projects/:id', 'ProjectController.show')
+
+  Route.get('projects/:id/tasks/', 'TaskController.index')
+  Route.get('projects/:id/tasks/:id', 'TaskController.show')
+}).middleware(['auth', 'can:read_task'])
