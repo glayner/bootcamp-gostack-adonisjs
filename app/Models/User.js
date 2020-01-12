@@ -3,6 +3,36 @@
 const Model = use('Model')
 const Hash = use('Hash')
 
+/**
+ * @swagger
+ * definitions:
+ *   User:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       username:
+ *         type: string
+ *       email:
+ *         type: string
+ *       password:
+ *         type: string
+ *         format: password
+ *       token:
+ *         type: string
+ *       token_created_at:
+ *         type: timestamp
+ *       created_at:
+ *         type: timestamp
+ *       updated_at:
+ *         type: timestamp
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+ *
+ */
+
 class User extends Model {
   static boot () {
     super.boot()
