@@ -33,7 +33,7 @@
     "adonis-kue": "^5.0.1",
     "adonis-sentry": "^2.0.2",
     "adonis-swagger": "^1.2.9",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "pg": "^7.17.0"
   },
   "devDependencies": {
